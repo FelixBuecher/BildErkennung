@@ -9,7 +9,7 @@
   <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 </head>
 <body>
-<table>
+<table id="seitenaufteilung">
   <tr>
     <td id="links">
       <div id="dropzone">
@@ -25,10 +25,27 @@
     </td>
   </tr>
 </table>
+<table id="beispiele">
+  <tr>
+    <td><b>Beispiel 1:</b></td>
+    <td><b>Beispiel 2:</b></td>
+    <td><b>Beispiel 3:</b></td>
+    <td><b>Beispiel 4:</b></td>
+    <td><b>Beispiel 5:</b></td>
+    <td><b>Beispiel 6:</b></td>
+  </tr>
+  <tr>
+    <td><input type="image" src="img/red.png" width="100px" onclick="loadExample(1)" alt="Beispiel 1"></td>
+    <td><input type="image" src="img/blue.png" width="100px" onclick="loadExample(2)" alt="Beispiel 2"></td>
+    <td><input type="image" src="img/cyan.png" width="100px" onclick="loadExample(3)" alt="Beispiel 3"></td>
+    <td><input type="image" src="img/green.png" width="100px" onclick="loadExample(4)" alt="Beispiel 4"></td>
+    <td><input type="image" src="img/pink.png" width="100px" onclick="loadExample(5)" alt="Beispiel 5"></td>
+    <td><input type="image" src="img/yellow.png" width="100px" onclick="loadExample(6)" alt="Beispiel 6"></td>
+  </tr>
+</table>
 <script>
   let classifier;
   let img;
-  let imgpath = "img/cyan.png";
   let chart = new Chart(document.getElementById("mychart"), {
     type: "bar",
     data: {
@@ -67,14 +84,12 @@
 
   function preload() {
     classifier = ml5.imageClassifier('MobileNet');
-    img = loadImage(imgpath);
   }
 
   function setup() {
-    let cnvs = createCanvas(300, 550);
+    let cnvs = createCanvas(400, 400);
     cnvs.parent("img-area");
-    classifier.classify(img, gotResult);
-    image(img, 0, 0);
+    cnvs.background(220,220,220,255);
   }
 
   function upLoadFile(file) {
@@ -86,8 +101,31 @@
     }
   }
 
+  function loadExample(example) {
+    switch(example) {
+      case 1:
+        img = loadImage("img/red.png", imageLoaded);
+        break;
+      case 2:
+        img = loadImage("img/blue.png", imageLoaded);
+        break;
+      case 3:
+        img = loadImage("img/cyan.png", imageLoaded);
+        break;
+      case 4:
+        img = loadImage("img/green.png", imageLoaded);
+        break;
+      case 5:
+        img = loadImage("img/pink.png", imageLoaded);
+        break;
+      case 6:
+        img = loadImage("img/yellow.png", imageLoaded);
+        break;
+    }
+  }
+
   function imageLoaded() {
-    image(img, 0, 0);
+    image(img, 0, 0, 400, 400);
     classifier.classify(img, gotResult);
   }
 

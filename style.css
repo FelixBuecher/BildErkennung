@@ -51,6 +51,10 @@ table {
   margin: 0;
 }
 
-td {
+#seitenaufteilung > td {
   width: 50%;
+}
+
+td {
+  text-align: center;
 }
