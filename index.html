@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ImageClassification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+</head>
+<body>
+<table>
+  <tr>
+    <td id="links">
+      <div id="dropzone">
+        <span id="dropzone-text">Drop file pls</span>
+        <input type="file" name="file" accept="image/*" id="dropzonefile">
+      </div>
+      <div id="img-area"></div>
+    </td>
+    <td id="rechts">
+      <div id="char-area">
+        <canvas id = "mychart" width="400" height="400"></canvas>
+      </div>
+    </td>
+  </tr>
+</table>
+<script>
+  let classifier;
+  let img;
+  let imgpath = "img/cyan.png";
+  let chart = new Chart(document.getElementById("mychart"), {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+      }]
+    },
+  });
+
+  document.querySelectorAll("#dropzonefile").forEach((inputElement) => {
+    const dropZoneElement = inputElement.closest("#dropzone");
+
+    dropZoneElement.addEventListener("click", (e) => {
+      inputElement.click();
+    });
+
+    inputElement.addEventListener("change", (e) => {
+      if (inputElement.files.length) {
+        upLoadFile(inputElement.files[0]);
+      }
+    });
+
+    dropZoneElement.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    dropZoneElement.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length) {
+        inputElement.files = e.dataTransfer.files;
+        upLoadFile(inputElement.files[0]);
+      }
+    });
+  });
+
+  function preload() {
+    classifier = ml5.imageClassifier('MobileNet');
+    img = loadImage(imgpath);
+  }
+
+  function setup() {
+    let cnvs = createCanvas(300, 550);
+    cnvs.parent("img-area");
+    classifier.classify(img, gotResult);
+    image(img, 0, 0);
+  }
+
+  function upLoadFile(file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      img = createImg(reader.result, imageLoaded);
+      document.images[0].parentNode.removeChild(document.images[0]);
+    }
+  }
+
+  function imageLoaded() {
+    image(img, 0, 0);
+    classifier.classify(img, gotResult);
+  }
+
+  function gotResult(error, results) {
+    let loop = chart.data.datasets[0].data.length;
+    for(let i = 0; i < loop; i++) {
+      chart.data.datasets[0].data.pop();
+      chart.data.labels.pop();
+    }
+    for (let i = 0; i < results.length; i++) {
+      chart.data.labels.push(results[i].label);
+      chart.data.datasets[0].data.push(results[i].confidence);
+    }
+    chart.update();
+  }
+
+</script>
+</body>
+</html>

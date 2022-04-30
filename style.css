@@ -1,0 +1,56 @@
+html {
+  font-family: Comfortaa, serif;
+  font-size: 25px;
+}
+
+#img-area {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+#dropzone {
+  width: 100%;
+  padding-bottom: 50px;
+  padding-top: 40px;
+  text-align: center;
+}
+
+#dropzone-text {
+  max-width: 200px;
+  height: 200px;
+  padding: 30px 60px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  color: #888888;
+  border: 4px dashed green;
+  border-radius: 8px;
+}
+
+#dropzonefile {
+  display: none;
+}
+
+#char-area {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.p5Canvas {
+  position: relative;
+  margin: 0;
+}
+
+table {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+td {
+  width: 50%;
+}
